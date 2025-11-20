@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import MapView from "./MapView";
 import axios from "axios";
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 export default function App() {
-  const [start, setStart] = useState("19.075983,72.877655"); 
+  const [start, setStart] = useState("19.075983,72.877655");
   const [end, setEnd] = useState("19.2183,72.9781");
   const [routeData, setRouteData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -11,9 +13,11 @@ export default function App() {
   async function fetchRoute() {
     setLoading(true);
     try {
-      const res = await axios.get("/api/route", {
+      // ⭐ CHANGED HERE — use API_BASE instead of "/api"
+      const res = await axios.get(`${API_BASE}/api/route`, {
         params: { start, end }
       });
+
       setRouteData(res.data);
     } catch (err) {
       alert("Error: " + err.message);
@@ -30,14 +34,18 @@ export default function App() {
           Smart Traffic Dashboard
         </h1>
 
-        <label className="text-sm font-semibold text-gray-600">Start (lat,lng)</label>
+        <label className="text-sm font-semibold text-gray-600">
+          Start (lat,lng)
+        </label>
         <input
           value={start}
           onChange={(e) => setStart(e.target.value)}
           className="border p-2 rounded mb-3"
         />
 
-        <label className="text-sm font-semibold text-gray-600">End (lat,lng)</label>
+        <label className="text-sm font-semibold text-gray-600">
+          End (lat,lng)
+        </label>
         <input
           value={end}
           onChange={(e) => setEnd(e.target.value)}
